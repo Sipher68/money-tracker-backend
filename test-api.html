@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Money Tracker API Tester</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+      }
+      .token-input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+      }
+      .btn {
+        background: #007cba;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      .btn:hover {
+        background: #005a8b;
+      }
+      .btn-danger {
+        background: #dc3545;
+      }
+      .btn-danger:hover {
+        background: #c82333;
+      }
+      .btn-success {
+        background: #28a745;
+      }
+      .btn-success:hover {
+        background: #1e7e34;
+      }
+      .response {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 4px;
+        padding: 15px;
+        margin: 10px 0;
+        white-space: pre-wrap;
+        font-family: monospace;
+        font-size: 12px;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+      .success {
+        border-left: 4px solid #28a745;
+      }
+      .error {
+        border-left: 4px solid #dc3545;
+      }
+      .form-group {
+        margin: 10px 0;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      .endpoint {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 10px 0;
+      }
+      .method {
+        padding: 4px 8px;
+        border-radius: 4px;
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        min-width: 60px;
+        text-align: center;
+      }
+      .get {
+        background: #28a745;
+      }
+      .post {
+        background: #007cba;
+      }
+      .put {
+        background: #ffc107;
+        color: #000;
+      }
+      .delete {
+        background: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🏦 Money Tracker API Tester</h1>
+
+    <div class="container">
+      <h2>🔑 Authentication Token</h2>
+      <p>
+        Paste your Firebase token here (get it by running:
+        <code>npm run firebase:generate-token</code>)
+      </p>
+      <textarea
+        id="authToken"
+        class="token-input"
+        rows="4"
+        placeholder="Paste your Firebase authentication token here..."
+      >
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTc1NjA1NDYxMywiZXhwIjoxNzU2MDU4MjEzLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0Btb25leS10cmFja2VyLWRhZmMyLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstZmJzdmNAbW9uZXktdHJhY2tlci1kYWZjMi5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6IlY5Q0ExRWxFazZmbXFUSW5qcUlteGVUeWxiejEiLCJjbGFpbXMiOnsiZW1haWwiOiJ0ZXN0QG1vbmV5dHJhY2tlci5jb20iLCJyb2xlIjoidXNlciJ9fQ.tUeMFgJ3R2LKhqIzWy7G49LBmofxOmZrpTtZNDSfdKYAIS_M-iG6QNXFTYcfB4BDs2f7QRqx8f9rKZoQaIOFVtGYn48QFRYguMhJrqUlMpTWlW4Dq23B5eoYn9ba1qU6ONmaQxd-csPTBX5lLVUpy9lkB1ZWAXZk1s7KAQBuoxINATPvGwWRxrrWOWc_8m_yHXwxR8_sLX4ZPkTM2ZV3fdB2Ikwkq1lrPyGqF_JfcLgHLwi8GkTrIVBi5LyUkArKViArnf_xzMSYFp-MsMEcPtWs9WvrWBnkFgO88v3oOe2K-0DvN4zoZ9EO7N-tJtVZ15KzyLTVfNCW9e_4Nz4XgA</textarea
+      >
+    </div>
+
+    <div class="container">
+      <h2>🧪 Quick Tests</h2>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span>/health</span>
+        <button class="btn" onclick="testEndpoint('GET', '/health')">
+          Test Health Check
+        </button>
+      </div>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span>/api/transactions</span>
+        <button class="btn" onclick="testEndpoint('GET', '/api/transactions')">
+          Get Transactions
+        </button>
+      </div>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span>/api/budgets</span>
+        <button class="btn" onclick="testEndpoint('GET', '/api/budgets')">
+          Get Budgets
+        </button>
+      </div>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span>/api/savings</span>
+        <button class="btn" onclick="testEndpoint('GET', '/api/savings')">
+          Get Savings Goals
+        </button>
+      </div>
+      <div class="endpoint">
+        <span class="method get">GET</span>
+        <span>/api/users/profile</span>
+        <button class="btn" onclick="testEndpoint('GET', '/api/users/profile')">
+          Get User Profile
+        </button>
+      </div>
+      <div id="quickTestResponse" class="response" style="display: none"></div>
+    </div>
+
+    <div class="container">
+      <h2>💰 Create Transaction</h2>
+      <div class="form-group">
+        <label>Type:</label>
+        <select id="transactionType">
+          <option value="expense">Expense</option>
+          <option value="income">Income</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Amount:</label>
+        <input
+          type="number"
+          id="transactionAmount"
+          placeholder="25.50"
+          step="0.01"
+          min="0"
+        />
+      </div>
+      <div class="form-group">
+        <label>Description:</label>
+        <input
+          type="text"
+          id="transactionDescription"
+          placeholder="Coffee at Starbucks"
+        />
+      </div>
+      <div class="form-group">
+        <label>Date:</label>
+        <input type="date" id="transactionDate" />
+      </div>
+      <button class="btn btn-success" onclick="createTransaction()">
+        Create Transaction
+      </button>
+      <div
+        id="transactionResponse"
+        class="response"
+        style="display: none"
+      ></div>
+    </div>
+
+    <div class="container">
+      <h2>📊 Create Budget</h2>
+      <div class="form-group">
+        <label>Category Name:</label>
+        <input type="text" id="budgetCategory" placeholder="Food & Dining" />
+      </div>
+      <div class="form-group">
+        <label>Amount:</label>
+        <input
+          type="number"
+          id="budgetAmount"
+          placeholder="500.00"
+          step="0.01"
+          min="0"
+        />
+      </div>
+      <div class="form-group">
+        <label>Period:</label>
+        <select id="budgetPeriod">
+          <option value="monthly">Monthly</option>
+          <option value="weekly">Weekly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+      </div>
+      <button class="btn btn-success" onclick="createBudget()">
+        Create Budget
+      </button>
+      <div id="budgetResponse" class="response" style="display: none"></div>
+    </div>
+
+    <div class="container">
+      <h2>🎯 Create Savings Goal</h2>
+      <div class="form-group">
+        <label>Goal Name:</label>
+        <input type="text" id="savingsName" placeholder="Emergency Fund" />
+      </div>
+      <div class="form-group">
+        <label>Target Amount:</label>
+        <input
+          type="number"
+          id="savingsTarget"
+          placeholder="5000.00"
+          step="0.01"
+          min="0"
+        />
+      </div>
+      <div class="form-group">
+        <label>Target Date:</label>
+        <input type="date" id="savingsDate" />
+      </div>
+      <div class="form-group">
+        <label>Description:</label>
+        <input
+          type="text"
+          id="savingsDescription"
+          placeholder="Save for 3 months of expenses"
+        />
+      </div>
+      <button class="btn btn-success" onclick="createSavingsGoal()">
+        Create Savings Goal
+      </button>
+      <div id="savingsResponse" class="response" style="display: none"></div>
+    </div>
+
+    <script>
+      // Set today's date as default
+      document.getElementById('transactionDate').value = new Date()
+        .toISOString()
+        .split('T')[0];
+
+      // Set future date for savings goal
+      const futureDate = new Date();
+      futureDate.setMonth(futureDate.getMonth() + 6);
+      document.getElementById('savingsDate').value = futureDate
+        .toISOString()
+        .split('T')[0];
+
+      async function makeRequest(method, endpoint, body = null) {
+        const token = document.getElementById('authToken').value.trim();
+        const headers = {
+          'Content-Type': 'application/json',
+        };
+
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const config = {
+          method: method,
+          headers: headers,
+        };
+
+        if (body && (method === 'POST' || method === 'PUT')) {
+          config.body = JSON.stringify(body);
+        }
+
+        try {
+          const response = await fetch(
+            `http://localhost:5000${endpoint}`,
+            config
+          );
+          const data = await response.text();
+
+          let jsonData;
+          try {
+            jsonData = JSON.parse(data);
+          } catch (e) {
+            jsonData = data;
+          }
+
+          return {
+            ok: response.ok,
+            status: response.status,
+            data: jsonData,
+          };
+        } catch (error) {
+          return {
+            ok: false,
+            status: 0,
+            data: `Network Error: ${error.message}`,
+          };
+        }
+      }
+
+      function showResponse(elementId, response) {
+        const element = document.getElementById(elementId);
+        element.style.display = 'block';
+        element.className = `response ${response.ok ? 'success' : 'error'}`;
+        element.textContent = `Status: ${response.status}\n\n${JSON.stringify(
+          response.data,
+          null,
+          2
+        )}`;
+      }
+
+      async function testEndpoint(method, endpoint) {
+        const response = await makeRequest(method, endpoint);
+        showResponse('quickTestResponse', response);
+      }
+
+      async function createTransaction() {
+        const transaction = {
+          type: document.getElementById('transactionType').value,
+          amount: parseFloat(
+            document.getElementById('transactionAmount').value
+          ),
+          description: document.getElementById('transactionDescription').value,
+          date: document.getElementById('transactionDate').value,
+        };
+
+        if (!transaction.amount || !transaction.description) {
+          alert('Please fill in amount and description');
+          return;
+        }
+
+        const response = await makeRequest(
+          'POST',
+          '/api/transactions',
+          transaction
+        );
+        showResponse('transactionResponse', response);
+      }
+
+      async function createBudget() {
+        const budget = {
+          categoryName: document.getElementById('budgetCategory').value,
+          amount: parseFloat(document.getElementById('budgetAmount').value),
+          period: document.getElementById('budgetPeriod').value,
+        };
+
+        if (!budget.categoryName || !budget.amount) {
+          alert('Please fill in category name and amount');
+          return;
+        }
+
+        const response = await makeRequest('POST', '/api/budgets', budget);
+        showResponse('budgetResponse', response);
+      }
+
+      async function createSavingsGoal() {
+        const savings = {
+          name: document.getElementById('savingsName').value,
+          target_amount: parseFloat(
+            document.getElementById('savingsTarget').value
+          ),
+          target_date: document.getElementById('savingsDate').value,
+          description: document.getElementById('savingsDescription').value,
+        };
+
+        if (!savings.name || !savings.target_amount) {
+          alert('Please fill in goal name and target amount');
+          return;
+        }
+
+        const response = await makeRequest('POST', '/api/savings', savings);
+        showResponse('savingsResponse', response);
+      }
+    </script>
+  </body>
+</html>

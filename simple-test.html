@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Money Tracker API Test</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      button {
+        padding: 10px 20px;
+        margin: 10px;
+        background: #007cba;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #005a8b;
+      }
+      .result {
+        background: #f0f0f0;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 4px;
+        white-space: pre-wrap;
+        font-family: monospace;
+      }
+      .success {
+        background: #d4edda;
+        border-left: 4px solid #28a745;
+      }
+      .error {
+        background: #f8d7da;
+        border-left: 4px solid #dc3545;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🏦 Money Tracker API Test</h1>
+
+      <h2>Authentication Token</h2>
+      <textarea id="token" rows="3">
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJodHRwczovL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbS9nb29nbGUuaWRlbnRpdHkuaWRlbnRpdHl0b29sa2l0LnYxLklkZW50aXR5VG9vbGtpdCIsImlhdCI6MTc1NjA1NDYxMywiZXhwIjoxNzU2MDU4MjEzLCJpc3MiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0Btb25leS10cmFja2VyLWRhZmMyLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwic3ViIjoiZmlyZWJhc2UtYWRtaW5zZGstZmJzdmNAbW9uZXktdHJhY2tlci1kYWZjMi5pYW0uZ3NlcnZpY2VhY2NvdW50LmNvbSIsInVpZCI6IlY5Q0ExRWxFazZmbXFUSW5qcUlteGVUeWxiejEiLCJjbGFpbXMiOnsiZW1haWwiOiJ0ZXN0QG1vbmV5dHJhY2tlci5jb20iLCJyb2xlIjoidXNlciJ9fQ.tUeMFgJ3R2LKhqIzWy7G49LBmofxOmZrpTtZNDSfdKYAIS_M-iG6QNXFTYcfB4BDs2f7QRqx8f9rKZoQaIOFVtGYn48QFRYguMhJrqUlMpTWlW4Dq23B5eoYn9ba1qU6ONmaQxd-csPTBX5lLVUpy9lkB1ZWAXZk1s7KAQBuoxINATPvGwWRxrrWOWc_8m_yHXwxR8_sLX4ZPkTM2ZV3fdB2Ikwkq1lrPyGqF_JfcLgHLwi8GkTrIVBi5LyUkArKViArnf_xzMSYFp-MsMEcPtWs9WvrWBnkFgO88v3oOe2K-0DvN4zoZ9EO7N-tJtVZ15KzyLTVfNCW9e_4Nz4XgA</textarea
+      >
+
+      <h2>Quick Tests</h2>
+      <button onclick="testHealth()">Test Health Check</button>
+      <button onclick="testTransactions()">
+        Test Transactions (Protected)
+      </button>
+      <button onclick="testBudgets()">Test Budgets (Protected)</button>
+
+      <h2>Create Test Data</h2>
+      <button onclick="createTransaction()">Create Sample Transaction</button>
+
+      <div id="results" class="result" style="display: none">
+        Results will appear here...
+      </div>
+    </div>
+
+    <script>
+      function showResult(data, isSuccess = true) {
+        const results = document.getElementById('results');
+        results.style.display = 'block';
+        results.className = isSuccess ? 'result success' : 'result error';
+        results.textContent = JSON.stringify(data, null, 2);
+      }
+
+      async function makeRequest(url, options = {}) {
+        try {
+          const token = document.getElementById('token').value.trim();
+          const headers = { 'Content-Type': 'application/json' };
+
+          if (token && !url.includes('/health')) {
+            headers['Authorization'] = `Bearer ${token}`;
+          }
+
+          const response = await fetch(url, {
+            ...options,
+            headers: { ...headers, ...options.headers },
+          });
+
+          const data = await response.json();
+          showResult({ status: response.status, data }, response.ok);
+        } catch (error) {
+          showResult({ error: error.message }, false);
+        }
+      }
+
+      function testHealth() {
+        makeRequest('http://localhost:5000/health');
+      }
+
+      function testTransactions() {
+        makeRequest('http://localhost:5000/api/transactions');
+      }
+
+      function testBudgets() {
+        makeRequest('http://localhost:5000/api/budgets');
+      }
+
+      function createTransaction() {
+        makeRequest('http://localhost:5000/api/transactions', {
+          method: 'POST',
+          body: JSON.stringify({
+            type: 'expense',
+            amount: 25.5,
+            description: 'Test coffee purchase',
+            date: new Date().toISOString().split('T')[0],
+          }),
+        });
+      }
+    </script>
+  </body>
+</html>
