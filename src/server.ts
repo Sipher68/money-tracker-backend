@@ -9,6 +9,7 @@ import path from 'path';
 import transactionRoutes from './routes/transactions';
 import budgetRoutes from './routes/budgets';
 import savingsRoutes from './routes/savings';
+import subscriptionRoutes from './routes/subscriptions';
 import userRoutes from './routes/users';
 
 // Import middleware
@@ -23,7 +24,10 @@ console.log('🔧 Environment Variables Debug:');
 console.log('- NODE_ENV:', process.env.NODE_ENV);
 console.log('- PORT:', process.env.PORT);
 console.log('- SUPABASE_URL:', process.env.SUPABASE_URL);
-console.log('- SUPABASE_SERVICE_ROLE_KEY:', process.env.SUPABASE_SERVICE_ROLE_KEY ? 'Set' : 'Not set');
+console.log(
+  '- SUPABASE_SERVICE_ROLE_KEY:',
+  process.env.SUPABASE_SERVICE_ROLE_KEY ? 'Set' : 'Not set'
+);
 console.log('- FIREBASE_PROJECT_ID:', process.env.FIREBASE_PROJECT_ID);
 
 const app = express();
@@ -198,6 +202,7 @@ app.use(express.static(path.join(__dirname, '..')));
 app.use('/api/transactions', transactionRoutes);
 app.use('/api/budgets', budgetRoutes);
 app.use('/api/savings', savingsRoutes);
+app.use('/api/subscriptions', subscriptionRoutes);
 app.use('/api/users', userRoutes);
 
 // 404 handler
